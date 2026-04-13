@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact: Is It Cheeky?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #f7f6f9;
+      color: #2e2c45;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    p { margin-bottom: 1.5rem; }
+    p:last-child { margin-bottom: 0; }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 3rem;
+    }
+
+    /* ── Nav ── */
+    .lp-nav-wrap {
+      padding: 1.25rem 4rem 0;
+    }
+
+    .lp-nav-wrap .site-nav { margin-bottom: 0; }
+
+    .site-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid #e2e0ec;
+    }
+
+    .site-nav .site-nav-wordmark {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: #8a8799;
+      text-decoration: none;
+    }
+
+    .site-nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .site-nav a {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: #8a8799;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .site-nav a:hover { color: #1a1a2e; }
+    .site-nav a.active { color: #4a3f8a; font-weight: 600; }
+
+    /* ── Header ── */
+    header { margin-bottom: 2.5rem; }
+
+    h1, h2, h3 { font-family: 'DM Serif Display', serif; }
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      color: #1a1a2e;
+    }
+
+    .tagline {
+      color: #8a8799;
+      margin-top: 0.45rem;
+      font-size: 1rem;
+    }
+
+    /* ── Toggle ── */
+    .toggle-wrap {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .toggle-btn {
+      padding: 0.5rem 1.25rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      font-family: inherit;
+      letter-spacing: 0.01em;
+    }
+
+    .toggle-btn.active {
+      background: #4a3f8a;
+      color: #f7f6f9;
+    }
+
+    .toggle-btn:not(.active) {
+      background: #efecf7;
+      color: #2e2c45;
+    }
+
+    .toggle-btn:not(.active):hover {
+      background: #ede9e3;
+    }
+
+    /* ── Form ── */
+    .form-group { margin-bottom: 1.1rem; }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #8a8799;
+      margin-bottom: 0.4rem;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 0.875rem 1.1rem;
+      font-size: 1rem;
+      border: 2px solid #d4d2e0;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.15s;
+      font-family: inherit;
+      color: #1a1a2e;
+      background: #f7f6f9;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    textarea:focus { border-color: #4a3f8a; }
+
+    input[type="email"] {
+      width: 100%;
+      padding: 0.875rem 1.1rem;
+      font-size: 1rem;
+      border: 2px solid #d4d2e0;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.15s;
+      font-family: inherit;
+      color: #1a1a2e;
+      background: #f7f6f9;
+    }
+
+    input[type="email"]:focus { border-color: #4a3f8a; }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      font-size: 0.9rem;
+      border: 2px dashed #d4d2e0;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.15s;
+      font-family: inherit;
+      color: #8a8799;
+      background: #efecf7;
+      cursor: pointer;
+    }
+
+    input[type="file"]:focus { border-color: #4a3f8a; }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 0.9rem;
+      font-size: 1rem;
+      font-weight: 700;
+      background: #1a1a2e;
+      color: #f7f6f9;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.15s;
+      font-family: inherit;
+      letter-spacing: 0.01em;
+    }
+
+    button[type="submit"]:hover:not(:disabled) { background: #2e2c45; }
+    button[type="submit"]:disabled { background: #999; cursor: not-allowed; }
+
+    /* ── Mode panels ── */
+    .mode-panel {
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.25s ease;
+    }
+
+    .mode-panel.hidden {
+      max-height: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .mode-panel.visible {
+      max-height: 600px;
+      opacity: 1;
+    }
+
+    /* ── Confirmation / error ── */
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0); }
+      60% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .confirmation {
+      display: none;
+      background: #efecf7;
+      border: 2px solid #c8c0e0;
+      border-radius: 10px;
+      padding: 1.25rem 1.35rem;
+      color: #4a3f8a;
+      font-size: 0.975rem;
+      line-height: 1.6;
+      margin-top: 1rem;
+      animation: fadeSlideIn 0.3s ease forwards;
+    }
+
+    .confirmation-inner {
+      display: flex;
+      align-items: center;
+    }
+
+    .confirmation-check {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #4a3f8a;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 0.6rem;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      line-height: 1;
+      animation: popIn 0.4s ease 0.15s both;
+    }
+
+    .error-msg {
+      display: none;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+      color: #7f1d1d;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e0ec;
+      font-size: 0.78rem;
+      color: #8a8799;
+      line-height: 1.6;
+    }
+
+    footer p { margin-bottom: 0; }
+    footer a { color: #4a3f8a; }
+
+    /* ── Mobile ── */
+    @media (max-width: 520px) {
+      h1 { font-size: 1.9rem; }
+      .lp-nav-wrap { padding: 1.25rem 1.5rem 0; }
+    }
+  </style>
+</head>
+<body>
+<div class="lp-nav-wrap">
+  <nav class="site-nav">
+    <a href="index.html" class="site-nav-wordmark">Is It Cheeky?</a>
+    <div class="site-nav-links">
+      <a href="index.html#tool">Check a property</a>
+      <a href="caveats.html">Caveats</a>
+      <a href="contact.html" class="active">Contact</a>
+    </div>
+  </nav>
+</div>
+<div class="container">
+
+  <header style="text-align:center">
+    <h1>Get in touch</h1>
+    <p class="tagline">Have a suggestion or found a bug? I'd love to hear from you.</p>
+  </header>
+
+  <div class="toggle-wrap">
+    <button type="button" class="toggle-btn active" id="btnFeedback">Feedback</button>
+    <button type="button" class="toggle-btn" id="btnBug">Bug report</button>
+  </div>
+
+  <form id="contactForm">
+    <!-- Hidden field so Formspree knows which mode was submitted -->
+    <input type="hidden" id="formMode" name="type" value="feedback">
+
+    <!-- Feedback mode -->
+    <div class="mode-panel visible" id="panelFeedback">
+      <div class="form-group">
+        <label for="feedbackText">Your feedback</label>
+        <textarea id="feedbackText" name="feedback" rows="6" placeholder="Share a feature request, a suggestion, or just let me know if it was useful..."></textarea>
+      </div>
+    </div>
+
+    <!-- Bug report mode -->
+    <div class="mode-panel hidden" id="panelBug">
+      <div class="form-group">
+        <label for="bugText">What's the bug?</label>
+        <textarea id="bugText" name="bug_description" rows="5" placeholder="Describe what happened and what you expected to happen..."></textarea>
+      </div>
+      <div class="form-group">
+        <label for="bugScreenshot">Screenshot (optional)</label>
+        <input type="file" id="bugScreenshot" name="screenshot" accept="image/jpeg,image/png,image/gif,image/webp">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="contactEmail">Your email (optional)</label>
+      <input type="email" id="contactEmail" name="email" placeholder="So I can get back to you">
+    </div>
+
+    <button type="submit" id="submitBtn">Send</button>
+  </form>
+
+  <div class="confirmation" id="confirmation">
+    <div class="confirmation-inner">
+      <span class="confirmation-check" aria-hidden="true">✓</span>
+      <span>Thanks, I've received your message and will take a look.</span>
+    </div>
+  </div>
+
+  <div class="error-msg" id="errorMsg">
+    Something went wrong. Please try again.
+  </div>
+
+  <footer>
+    <p>Data sourced from <a href="https://landregistry.data.gov.uk" target="_blank" rel="noopener">HM Land Registry</a>: Price Paid Data and UK House Price Index. Covers England and Wales only. For guidance only, not financial or legal advice.</p>
+  </footer>
+
+</div>
+<script>
+'use strict';
+
+const FORMSPREE_URL = 'https://hooks.zapier.com/hooks/catch/27201729/u70r580/';
+
+let currentMode = 'feedback';
+
+function switchMode(mode) {
+  currentMode = mode;
+  document.getElementById('formMode').value = mode;
+  document.getElementById('confirmation').style.display = 'none';
+
+  const btnFeedback  = document.getElementById('btnFeedback');
+  const btnBug       = document.getElementById('btnBug');
+  const panelFeedback = document.getElementById('panelFeedback');
+  const panelBug      = document.getElementById('panelBug');
+
+  if (mode === 'feedback') {
+    btnFeedback.classList.add('active');
+    btnBug.classList.remove('active');
+    panelFeedback.classList.remove('hidden');
+    panelFeedback.classList.add('visible');
+    panelBug.classList.remove('visible');
+    panelBug.classList.add('hidden');
+    document.getElementById('bugText').required = false;
+    document.getElementById('feedbackText').required = true;
+  } else {
+    btnBug.classList.add('active');
+    btnFeedback.classList.remove('active');
+    panelBug.classList.remove('hidden');
+    panelBug.classList.add('visible');
+    panelFeedback.classList.remove('visible');
+    panelFeedback.classList.add('hidden');
+    document.getElementById('feedbackText').required = false;
+    document.getElementById('bugText').required = true;
+  }
+}
+
+document.getElementById('btnFeedback').addEventListener('click', () => switchMode('feedback'));
+document.getElementById('btnBug').addEventListener('click', () => switchMode('bug'));
+
+document.getElementById('contactForm').addEventListener('submit', async e => {
+  e.preventDefault();
+
+  const submitBtn    = document.getElementById('submitBtn');
+  const confirmation = document.getElementById('confirmation');
+  const errorMsg     = document.getElementById('errorMsg');
+
+  confirmation.style.display = 'none';
+  errorMsg.style.display     = 'none';
+  submitBtn.disabled         = true;
+  submitBtn.textContent      = 'Sending…';
+
+  try {
+    const formData = new FormData();
+    formData.append('type', currentMode);
+
+    if (currentMode === 'feedback') {
+      const feedback = document.getElementById('feedbackText').value.trim();
+      if (!feedback) { submitBtn.disabled = false; submitBtn.textContent = 'Send'; return; }
+      formData.append('feedback', feedback);
+    } else {
+      const bug = document.getElementById('bugText').value.trim();
+      if (!bug) { submitBtn.disabled = false; submitBtn.textContent = 'Send'; return; }
+      formData.append('bug_description', bug);
+      const screenshot = document.getElementById('bugScreenshot').files[0];
+      if (screenshot) formData.append('screenshot', screenshot);
+    }
+
+    const email = document.getElementById('contactEmail').value.trim();
+    if (email) formData.append('email', email);
+
+    const res = await fetch(FORMSPREE_URL, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: formData,
+    });
+
+    if (res.ok) {
+      document.getElementById('contactForm').reset();
+      submitBtn.textContent = 'Send';
+      submitBtn.disabled    = false;
+      confirmation.style.display = 'block';
+      setTimeout(() => { confirmation.style.display = 'none'; }, 8000);
+    } else {
+      throw new Error(`Status ${res.status}`);
+    }
+  } catch (err) {
+    console.error('[Contact] Submit error:', err);
+    submitBtn.textContent = 'Send';
+    submitBtn.disabled    = false;
+    errorMsg.style.display = 'block';
+  }
+});
+
+// Set initial required state
+document.getElementById('feedbackText').required = true;
+</script>
+</body>
+</html>

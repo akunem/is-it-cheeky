@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Is It Cheeky?: UK Property Price Checker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #f7f6f9;
+      color: #2e2c45;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    p { margin-bottom: 1.5rem; }
+    p:last-child { margin-bottom: 0; }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 3rem;
+    }
+
+    header { margin-bottom: 2.5rem; }
+
+    h1, h2, h3 { font-family: 'DM Serif Display', serif; }
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      color: #1a1a2e;
+    }
+
+    .tagline {
+      color: #8a8799;
+      margin-top: 0.45rem;
+      font-size: 1rem;
+    }
+
+    /* ── Form ── */
+    .form-group { margin-bottom: 1.1rem; }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #8a8799;
+      margin-bottom: 0.4rem;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 0.875rem 1.1rem;
+      font-size: 1rem;
+      border: 2px solid #d4d2e0;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.15s;
+      font-family: inherit;
+      color: #1a1a2e;
+      background: #f7f6f9;
+    }
+
+    input:focus { border-color: #4a3f8a; }
+
+    select {
+      width: 100%;
+      padding: 0.875rem 1.1rem;
+      font-size: 1rem;
+      border: 2px solid #d4d2e0;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.15s;
+      font-family: inherit;
+      color: #1a1a2e;
+      background: #f7f6f9 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 1rem center;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    select:focus { border-color: #4a3f8a; }
+
+    .field-error {
+      font-size: 0.8rem;
+      color: #dc2626;
+      margin-top: 0.35rem;
+      display: none;
+    }
+
+    /* ── Address search ── */
+    #addrSearchGroup { position: relative; }
+
+    .addr-confirm {
+      display: none;
+      margin-top: 0.6rem;
+      font-size: 0.875rem;
+      color: #8a8799;
+      align-items: baseline;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .addr-confirm.visible { display: flex; }
+
+    .addr-confirm-check { color: #16a34a; }
+
+    .addr-change-link {
+      display: inline-block;
+      font-size: 0.8rem;
+      color: #4a3f8a;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s, border-bottom-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .manual-entry-link {
+      display: block;
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      color: #4a3f8a;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s, border-bottom-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .addr-change-link:hover,
+    .manual-entry-link:hover {
+      color: #1a1a2e;
+      border-bottom-color: #4a3f8a;
+    }
+
+    /* ── Manual address section ── */
+    #addrManualSection { display: none; }
+    #addrManualSection.visible { display: block; }
+
+    /* ── Custom address autocomplete dropdown ── */
+    .addr-dropdown {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 4px);
+      background: #f7f6f9;
+      border: 2px solid #d4d2e0;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.09);
+      z-index: 9999;
+      list-style: none;
+      padding: 0.3rem 0;
+      margin: 0;
+      max-height: 260px;
+      overflow-y: auto;
+      font-family: inherit;
+    }
+
+    .addr-dropdown li {
+      padding: 0.6rem 1rem;
+      font-size: 0.95rem;
+      color: #2e2c45;
+      cursor: pointer;
+      line-height: 1.4;
+    }
+
+    .addr-dropdown li:hover,
+    .addr-dropdown li.active {
+      background: #efecf7;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 0.9rem;
+      font-size: 1rem;
+      font-weight: 700;
+      background: #1a1a2e;
+      color: #f7f6f9;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.15s;
+      font-family: inherit;
+      letter-spacing: 0.01em;
+    }
+
+    button[type="submit"]:hover:not(:disabled) { background: #2e2c45; }
+    button[type="submit"]:disabled { background: #999; cursor: not-allowed; }
+
+    /* ── Loading ── */
+    .loading {
+      text-align: center;
+      padding: 3rem 0;
+      color: #1a1a2e;
+      display: none;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #e2e0ec;
+      border-top-color: #1a1a2e;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #loadingMsg {
+      transition: opacity 0.18s ease;
+    }
+
+    .loading-step {
+      font-size: 0.875rem;
+      color: #8a8799;
+      margin-top: 0.35rem;
+      transition: opacity 0.18s ease;
+    }
+
+    /* ── Results ── */
+    .results { margin-top: 2rem; display: none; }
+
+    /* ── Verdict card ── */
+    .verdict-card {
+      border-radius: 14px;
+      padding: 2.3rem 2.2rem;
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+
+    .verdict-card.fair       { background: #f0f7f0; border: 2px solid #7fb87f; }
+    .verdict-card.bit-cheeky { background: #fdf8ee; border: 2px solid #c4a24a; }
+    .verdict-card.very-cheeky{ background: #fdf0f0; border: 2px solid #c47a7a; }
+    .verdict-card.below-market{ background: #efecf7; border: 2px solid #4a3f8a; }
+    .verdict-card.no-data    { background: #efecf7; border: 2px solid #c8c0b8; }
+
+    .verdict-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #8a8799;
+      margin-bottom: 0.55rem;
+    }
+
+    .verdict-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3rem;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .verdict-card.fair        .verdict-text { color: #3a7a4a; }
+    .verdict-card.bit-cheeky  .verdict-text { color: #8a6020; }
+    .verdict-card.very-cheeky .verdict-text { color: #8a3030; }
+    .verdict-card.below-market .verdict-text { color: #4a3f8a; }
+    .verdict-card.no-data      .verdict-text { color: #5a5550; font-size: 1.6rem; }
+
+    .verdict-explanation {
+      font-size: 0.95rem;
+      color: #8a8799;
+      margin-top: 1rem;
+      line-height: 1.6;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+      border-left: 3px solid #4a3f8a;
+      padding-left: 1rem;
+    }
+
+    /* ── Price summary row ── */
+    .price-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.875rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .price-card {
+      background: #efecf7;
+      border-radius: 10px;
+      padding: 1.1rem 0.85rem;
+      text-align: center;
+    }
+
+    .price-card-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: #8a8799;
+      margin-bottom: 0.35rem;
+    }
+
+    .price-card-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    .price-card-sub {
+      font-size: 0.71rem;
+      color: #8a8799;
+      margin-top: 0.2rem;
+    }
+
+    /* ── Section ── */
+    .section { margin-bottom: 2rem; }
+
+    .section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: #8a8799;
+      margin-bottom: 0.9rem;
+    }
+
+    /* ── Tables ── */
+    .sale-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .sale-table th {
+      text-align: left;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #8a8799;
+      padding: 0.45rem 0.75rem;
+      border-bottom: 1px solid #e2e0ec;
+    }
+
+    .sale-table td {
+      padding: 0.6rem 0.75rem;
+      font-size: 0.925rem;
+      border-bottom: 1px solid #e2e0ec;
+      color: #2e2c45;
+    }
+
+    .sale-table tr:last-child td { border-bottom: none; }
+
+    .sale-table .amount {
+      font-weight: 600;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .sale-table .addr-cell {
+      font-size: 0.85rem;
+      color: #8a8799;
+    }
+
+    /* ── Comp summary pills ── */
+    .comp-summary {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .comp-pill {
+      background: #efecf7;
+      border-radius: 8px;
+      padding: 0.65rem 1rem;
+      text-align: center;
+      flex: 1;
+      min-width: 100px;
+    }
+
+    .comp-pill-label {
+      font-size: 0.67rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #8a8799;
+      margin-bottom: 0.2rem;
+    }
+
+    .comp-pill-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    /* ── Notices ── */
+    .notice {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 0.875rem 1rem;
+      font-size: 0.875rem;
+      color: #78350f;
+      margin-bottom: 1.25rem;
+      line-height: 1.5;
+    }
+
+    .error-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      padding: 1.25rem 1.35rem;
+      color: #7f1d1d;
+    }
+
+    .error-box strong { display: block; margin-bottom: 0.4rem; font-size: 1.05rem; }
+    .error-box p { font-size: 0.9rem; margin-top: 0.3rem; margin-bottom: 0; }
+
+    .disclaimer {
+      font-size: 0.78rem;
+      color: #8a8799;
+      margin-top: 1rem;
+      line-height: 1.55;
+      margin-bottom: 0;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e0ec;
+      font-size: 0.78rem;
+      color: #8a8799;
+      line-height: 1.6;
+    }
+
+    footer p { margin-bottom: 0; }
+    footer a { color: #4a3f8a; }
+
+    /* ── Nav ── */
+    .site-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid #e2e0ec;
+    }
+
+    .site-nav .site-nav-wordmark {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: #1a1a2e;
+      text-decoration: none;
+    }
+
+    .site-nav .site-nav-wordmark.muted { color: #8a8799; }
+
+    .site-nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .site-nav a {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: #8a8799;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .site-nav a:hover { color: #1a1a2e; }
+    .site-nav a.active { color: #4a3f8a; font-weight: 600; }
+
+    /* ── Landing screen ── */
+    #landing {
+      opacity: 1;
+      transition: opacity 0.35s ease;
+    }
+
+    #landing.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #toolScreen {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    #toolScreen.visible { display: block; }
+    #toolScreen.fade-in { opacity: 1; }
+
+    /* Nav — full width with generous horizontal gutters */
+    .lp-nav-wrap {
+      padding: 1.25rem 4rem 0;
+    }
+
+    .lp-nav-wrap .site-nav { margin-bottom: 0; }
+
+    /* Section 1 — Hero */
+    .landing-hero {
+      min-height: 80vh;
+      padding-top: 18vh;
+      padding-bottom: 8vh;
+      text-align: center;
+    }
+
+    .landing-hero .container {
+      max-width: 860px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .landing-eyebrow {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #4a3f8a;
+      margin-bottom: 1.5rem;
+    }
+
+    .landing-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3.8rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: #1a1a2e;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .landing-subline {
+      font-size: 1.2rem;
+      color: #8a8799;
+      margin-bottom: 2.5rem;
+    }
+
+    .landing-cta-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.1rem;
+    }
+
+    .cta-btn {
+      padding: 0.9rem 2.5rem;
+      min-width: 220px;
+      font-size: 1rem;
+      font-weight: 700;
+      background: #4a3f8a;
+      color: #f7f6f9;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-family: inherit;
+      letter-spacing: 0.01em;
+    }
+
+    .cta-btn:hover { background: #3a3070; }
+
+    .landing-meta {
+      font-size: 0.78rem;
+      color: #8a8799;
+      margin-bottom: 0;
+    }
+
+    /* Tabbed section */
+    .tab-section {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 3rem 4rem;
+      background: #eeedf4;
+    }
+
+    .tab-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid #e2e0ec;
+      margin-bottom: 0;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      padding: 1rem 0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: #8a8799;
+      cursor: pointer;
+      text-align: center;
+      width: 100%;
+      transition: color 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      color: #1a1a2e;
+    }
+
+    .tab-btn.active {
+      border-bottom-color: #4a3f8a;
+      color: #1a1a2e;
+      font-weight: 500;
+    }
+
+    .tab-panel {
+      display: none;
+      padding-top: 3rem;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* Body text paragraphs only — excludes any p with a class */
+    .tab-panel p:not([class]) {
+      font-size: 1.2rem;
+      color: #2e2c45;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-panel p:not([class]):last-child { margin-bottom: 0; }
+
+    .landing-section-label {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: #1a1a2e;
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    .landing-pullquote {
+      border-left: 3px solid #4a3f8a;
+      padding-left: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .landing-stat {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem;
+      color: #1a1a2e;
+      line-height: 1.35;
+      margin-bottom: 0.75rem;
+    }
+
+    .landing-attribution {
+      font-size: 0.82rem;
+      color: #8a8799;
+      margin-bottom: 0;
+    }
+
+    .landing-attribution a {
+      color: #4a3f8a;
+      text-decoration: underline;
+      text-decoration-color: rgba(74, 63, 138, 0.4);
+      text-underline-offset: 2px;
+    }
+
+    .landing-attribution a:hover { text-decoration-color: #4a3f8a; }
+
+    /* Section 4 — Bottom CTA */
+    .landing-cta-section {
+      min-height: auto;
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+      text-align: center;
+      background: #1a1a2e;
+    }
+
+    .landing-cta-section .container {
+      max-width: 860px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .landing-cta-heading {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: #ffffff;
+      margin-bottom: 0.6rem;
+    }
+
+    .landing-cta-sub {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 2rem;
+    }
+
+    .landing-cta-section .cta-btn {
+      background: #ffffff;
+      color: #1a1a2e;
+    }
+
+    .landing-cta-section .cta-btn:hover {
+      background: rgba(255,255,255,0.9);
+    }
+
+    .landing-footer {
+      background: #1a1a2e;
+      padding: 2rem 4rem 2rem;
+      padding-top: 0;
+      margin-top: 0;
+      border-top: none;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .landing-footer p { margin-bottom: 0; }
+    .landing-footer a { color: rgba(255,255,255,0.6); }
+
+    /* Tool screen heading */
+    #toolScreen h1 { color: #1a1a2e; }
+
+    /* ── Mobile ── */
+    @media (max-width: 520px) {
+      h1 { font-size: 1.9rem; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+      .price-row { grid-template-columns: 1fr; gap: 0.6rem; }
+      .verdict-text { font-size: 2rem; }
+      .verdict-card { padding: 1.75rem 1.4rem; }
+      .landing-headline { font-size: 2.6rem; }
+      .landing-stat { font-size: 1.4rem; }
+      .landing-section-label { font-size: 1.6rem; }
+      .lp-nav-wrap { padding: 1.25rem 1.5rem 0; }
+      .cta-btn { width: 100%; min-width: 0; padding: 0.9rem 1rem; }
+    }
+
+    /* Calculation visual */
+    .calc-visual {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    .calc-box {
+      background: #f7f6f9;
+      border: 1px solid #e2e0ec;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      min-width: 140px;
+      flex: 1;
+    }
+
+    .calc-box-result {
+      background: #efecf7;
+      border-color: #4a3f8a;
+    }
+
+    .calc-label {
+      font-size: 0.75rem;
+      color: #8a8799;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.4rem;
+    }
+
+    .calc-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      color: #1a1a2e;
+      line-height: 1.2;
+    }
+
+    .calc-box-result .calc-value { color: #4a3f8a; }
+
+    .calc-sub {
+      font-size: 0.8rem;
+      color: #8a8799;
+      margin-top: 0.25rem;
+    }
+
+    .calc-arrow {
+      font-size: 1.4rem;
+      color: #8a8799;
+      font-weight: 300;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 520px) {
+      .calc-visual { flex-direction: column; align-items: stretch; }
+      .calc-arrow { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ Landing screen ══ -->
+<div id="landing">
+
+  <!-- Nav -->
+  <div class="lp-nav-wrap">
+    <nav class="site-nav">
+      <a href="index.html" class="site-nav-wordmark">Is It Cheeky?</a>
+      <div class="site-nav-links">
+        <a href="#" id="navCheckLink">Check a property</a>
+        <a href="caveats.html">Caveats</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Section 1 — Hook -->
+  <div class="landing-hero">
+    <div class="container">
+      <p class="landing-eyebrow">For first time buyers</p>
+      <h1 class="landing-headline">A quick sense check<br>before you make an offer.</h1>
+      <p class="landing-subline">Built by a first time buyer, for first time buyers.</p>
+      <div class="landing-cta-wrap">
+        <button class="cta-btn" id="ctaBtn">Check a property &rarr;</button>
+      </div>
+      <p class="landing-meta">Personal project &middot; England &amp; Wales only &middot; Data from HM Land Registry</p>
+    </div>
+  </div>
+
+  <!-- Sections 2 & 3 — tabbed -->
+  <div class="tab-section">
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="why">Why I built this</button>
+      <button class="tab-btn" data-tab="how">How I work it out</button>
+    </div>
+    <div class="tab-content">
+
+      <div class="tab-panel active" id="tab-why">
+        <p>I recently joined the ever-growing club of first time buyers. Membership is free. House is not.</p>
+        <p>And like most people going through it for the first time, I found it, well, terrifying. Just your standard mix of market movements, <s style="color:#8a8799;">aggressive</s> enthusiastic estate agents, mortgage rates that seem to change weekly, and the sudden realisation that a bathroom renovation costs <em>how much</em> now?</p>
+        <p>At some point, every property starts looking either like a bargain or a trap. And you have absolutely no idea which.</p>
+        <div class="landing-pullquote">
+          <p class="landing-stat">"4 in 10 recent homeowners said buying a home was one of the most stressful life events they'd experienced."</p>
+          <p class="landing-attribution"><a href="https://www.whatmortgage.co.uk/news/the-most-stressful-things-about-buying-a-home-revealed/" target="_blank" rel="noopener">Research by OnePoll</a></p>
+          <p style="font-style:italic;color:#8a8799;font-size:0.9rem;margin-top:0.5rem;">(The other 6 in 10 are cool, calm and collected. We don't talk about them.)</p>
+        </div>
+        <p style="margin-top:2rem;">Early on I started doing the same thing for every property I viewed, opening far too many tabs, digging through Land Registry data, comparing nearby sales, trying to work out if the asking price was fair or just a bit cheeky. All while trying not to look like an absolute mug when it came to making an offer.</p>
+        <p>After a while I thought: surely there's a better way to do this than drowning in bookmarks and tabs for every listing.</p>
+        <p style="font-weight:500;margin-top:0.5rem;">So I built one.</p>
+      </div>
+
+      <div class="tab-panel" id="tab-how">
+        <p>The tool combines two official government datasets, both available in <a href="https://en.wikipedia.org/wiki/Linked_data" target="_blank" rel="noopener" style="color:#4a3f8a;">linked data</a> format from <a href="https://landregistry.data.gov.uk/" target="_blank" rel="noopener" style="color:#4a3f8a;">HM Land Registry</a>: Price Paid Data and the UK House Price Index.</p>
+        <p>Here is what happens when you check a property.</p>
+        <p>First, the tool looks up the full sale history for that specific address, every recorded sale with its date and price paid.</p>
+        <p>Second, it pulls comparable sales from the same street over the last three years, filtered by property type, so you can see what the surrounding market actually looks like.</p>
+        <p>Third, it uses the UK House Price Index to measure how much prices in that region have grown since the last sale. It applies that growth to the last sold price to estimate what the property should be worth today, then compares that figure to the asking price to produce the verdict.</p>
+        <div class="calc-visual">
+          <div class="calc-box">
+            <div class="calc-label">Last sold price</div>
+            <div class="calc-value">£300,000</div>
+            <div class="calc-sub">September 2021</div>
+          </div>
+          <div class="calc-arrow">&times;</div>
+          <div class="calc-box">
+            <div class="calc-label">Regional HPI growth</div>
+            <div class="calc-value">+4.9%</div>
+            <div class="calc-sub">South East</div>
+          </div>
+          <div class="calc-arrow">=</div>
+          <div class="calc-box calc-box-result">
+            <div class="calc-label">Expected price today</div>
+            <div class="calc-value">£314,700</div>
+            <div class="calc-sub">Based on HPI</div>
+          </div>
+        </div>
+        <div class="calc-visual" style="margin-top:1.5rem">
+          <div class="calc-box">
+            <div class="calc-label">Expected price today</div>
+            <div class="calc-value">£314,700</div>
+            <div class="calc-sub">Based on HPI</div>
+          </div>
+          <div class="calc-arrow">vs</div>
+          <div class="calc-box">
+            <div class="calc-label">Asking price</div>
+            <div class="calc-value">£350,000</div>
+            <div class="calc-sub">11% above expected</div>
+          </div>
+          <div class="calc-arrow">=</div>
+          <div class="calc-box calc-box-accent" style="background:#fdf8ee;border:1px solid #c4a24a">
+            <div class="calc-label">Verdict</div>
+            <div class="calc-value" style="color:#8a6020">A Bit Cheeky</div>
+            <div class="calc-sub">5–15% above expected</div>
+          </div>
+        </div>
+        <p>This goes without saying, but I have to say it anyway: disclaimer, duh. Is It Cheeky? won't replace a surveyor or a mortgage advisor. But it will give you a quick, data-backed sense check on whether the asking price looks fair before you make an offer.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Section 4 — Bottom CTA -->
+  <div class="landing-cta-section">
+    <div class="container">
+      <h2 class="landing-cta-heading">Ready to check a property?</h2>
+      <div class="landing-cta-wrap">
+        <button class="cta-btn" id="ctaBtnBottom" onclick="showTool()">Check a property &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="landing-footer">
+    <p>Data sourced from <a href="https://landregistry.data.gov.uk" target="_blank" rel="noopener">HM Land Registry</a>: Price Paid Data and UK House Price Index. Covers England and Wales only. For guidance only, not financial or legal advice.</p>
+  </footer>
+
+</div>
+
+<!-- ══ Tool screen ══ -->
+<div id="toolScreen">
+  <div class="lp-nav-wrap">
+    <nav class="site-nav">
+      <a href="index.html" class="site-nav-wordmark" id="toolNavWordmark">Is It Cheeky?</a>
+      <div class="site-nav-links">
+        <a href="index.html" id="toolNavCheckLink" class="active">Check a property</a>
+        <a href="caveats.html">Caveats</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </nav>
+  </div>
+  <div class="container">
+
+  <header>
+    <h1>Check a property</h1>
+    <p class="tagline">Check whether a property's asking price is fair, using real Land Registry sold data.</p>
+  </header>
+
+  <form id="checkForm" autocomplete="off" novalidate>
+
+    <!-- 1. Property type -->
+    <div class="form-group">
+      <label for="propertyType">Property type</label>
+      <select id="propertyType">
+        <option value="" disabled selected>Select property type</option>
+        <option value="D">Detached</option>
+        <option value="S">Semi-detached</option>
+        <option value="T">Terraced</option>
+        <option value="F">Flat / Maisonette</option>
+      </select>
+      <p class="field-error" id="propTypeError">Please select a property type.</p>
+    </div>
+
+    <!-- 2. Address autocomplete -->
+    <div class="form-group" id="addrSearchGroup">
+      <label for="address-search">Property address</label>
+      <input type="text" id="address-search" placeholder="Start typing a postcode or address..." autocomplete="off">
+      <div class="addr-confirm" id="addrConfirm">
+        <span class="addr-confirm-check">&#10003;</span>
+        <span id="addrConfirmText"></span>
+        <a href="#" class="addr-change-link" id="addrChangeLink">Change</a>
+      </div>
+      <a href="#" class="manual-entry-link" id="manualEntryLink">Enter address manually instead</a>
+    </div>
+
+    <!-- 3. Manual address fields (hidden until manual mode) -->
+    <div id="addrManualSection">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="houseNumber">House number / name</label>
+          <input type="text" id="houseNumber" placeholder="e.g. 10 or Flat 3">
+        </div>
+        <div class="form-group">
+          <label for="street">Street name</label>
+          <input type="text" id="street" placeholder="e.g. Downing Street">
+        </div>
+      </div>
+      <div class="form-row" style="grid-template-columns: 1fr 1fr">
+        <div class="form-group">
+          <label for="postcode">Postcode</label>
+          <input type="text" id="postcode" placeholder="e.g. SW1A 1AA">
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden fields populated by autocomplete -->
+    <input type="hidden" id="paonField">
+    <input type="hidden" id="streetField">
+    <input type="hidden" id="postcodeField">
+
+    <!-- 4. Asking price -->
+    <div class="form-group">
+      <label for="askingPrice">Asking price (£)</label>
+      <input type="number" id="askingPrice" placeholder="e.g. 350000" min="1" required>
+    </div>
+
+    <button type="submit" id="submitBtn">Is it cheeky?</button>
+  </form>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div id="loadingMsg">Looking up sold prices…</div>
+    <div class="loading-step" id="loadingStep"></div>
+  </div>
+
+  <div class="results" id="results"></div>
+
+  <footer>
+    <p>Data sourced from <a href="https://landregistry.data.gov.uk" target="_blank" rel="noopener">HM Land Registry</a>: Price Paid Data and UK House Price Index. Covers England and Wales only. For guidance only, not financial or legal advice.</p>
+  </footer>
+
+</div>
+</div><!-- /#toolScreen -->
+<script>
+'use strict';
+
+// ─────────────────────────────────────────────────────────────
+// Landing → Tool transition
+// ─────────────────────────────────────────────────────────────
+function showTool() {
+  const landing  = document.getElementById('landing');
+  const tool     = document.getElementById('toolScreen');
+  const wordmark = document.getElementById('toolNavWordmark');
+
+  landing.classList.add('fade-out');
+
+  setTimeout(function () {
+    landing.style.display = 'none';
+    tool.classList.add('visible');
+    if (wordmark) wordmark.classList.add('muted');
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        tool.classList.add('fade-in');
+      });
+    });
+  }, 350);
+}
+
+document.getElementById('ctaBtn').addEventListener('click', showTool);
+
+document.getElementById('navCheckLink').addEventListener('click', function (e) {
+  e.preventDefault();
+  showTool();
+});
+
+document.getElementById('toolNavCheckLink').addEventListener('click', function (e) {
+  if (document.getElementById('toolScreen').classList.contains('visible')) {
+    e.preventDefault();
+  }
+});
+
+// Arrive directly on the tool screen when linked from another page
+(function () {
+  if (window.location.hash === '#tool') {
+    console.log('[tool=1] block fired, landing hidden, toolScreen shown');
+    var landing = document.getElementById('landing');
+    var tool = document.getElementById('toolScreen');
+    var wordmark = document.getElementById('toolNavWordmark');
+    if (landing) landing.style.display = 'none';
+    if (tool) { tool.style.display = 'block'; tool.style.opacity = '1'; tool.classList.add('visible', 'fade-in'); }
+    if (wordmark) wordmark.classList.add('muted');
+  }
+})();
+
+// ─────────────────────────────────────────────────────────────
+// Tab switching
+// ─────────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    const target = btn.getAttribute('data-tab');
+
+    document.querySelectorAll('.tab-btn').forEach(function (b) {
+      b.classList.remove('active');
+    });
+    document.querySelectorAll('.tab-panel').forEach(function (p) {
+      p.classList.remove('active');
+    });
+
+    btn.classList.add('active');
+    document.getElementById('tab-' + target).classList.add('active');
+  });
+});
+
+// ─────────────────────────────────────────────────────────────
+// Postcode area → UKHPI region slug
+// ─────────────────────────────────────────────────────────────
+const POSTCODE_REGION = {
+  // London
+  E:'london', EC:'london', N:'london', NW:'london', SE:'london',
+  SW:'london', W:'london', WC:'london', BR:'london', CR:'london',
+  DA:'london', EN:'london', HA:'london', IG:'london', KT:'london',
+  RM:'london', SM:'london', TW:'london', UB:'london', WD:'london',
+  // South East
+  BN:'south-east', CT:'south-east', GU:'south-east', HP:'south-east',
+  ME:'south-east', MK:'south-east', OX:'south-east', PO:'south-east',
+  RG:'south-east', RH:'south-east', SL:'south-east', SO:'south-east',
+  SS:'south-east', TN:'south-east',
+  // South West
+  BA:'south-west', BH:'south-west', BS:'south-west', DT:'south-west',
+  EX:'south-west', GL:'south-west', PL:'south-west', SN:'south-west',
+  TA:'south-west', TQ:'south-west', TR:'south-west',
+  // East of England
+  AL:'east-of-england', CB:'east-of-england', CM:'east-of-england',
+  CO:'east-of-england', IP:'east-of-england', LU:'east-of-england',
+  NR:'east-of-england', PE:'east-of-england', SG:'east-of-england',
+  // East Midlands
+  DE:'east-midlands', LE:'east-midlands', LN:'east-midlands',
+  NG:'east-midlands', NN:'east-midlands',
+  // West Midlands
+  B:'west-midlands', CV:'west-midlands', DY:'west-midlands',
+  HR:'west-midlands', ST:'west-midlands', TF:'west-midlands',
+  WR:'west-midlands', WS:'west-midlands', WV:'west-midlands',
+  // North West
+  BB:'north-west', BL:'north-west', CA:'north-west', CH:'north-west',
+  CW:'north-west', FY:'north-west', LA:'north-west', L:'north-west',
+  M:'north-west', OL:'north-west', PR:'north-west', SK:'north-west',
+  WA:'north-west', WN:'north-west',
+  // North East
+  DH:'north-east', DL:'north-east', NE:'north-east', SR:'north-east', TS:'north-east',
+  // Yorkshire and the Humber
+  BD:'yorkshire-and-the-humber', DN:'yorkshire-and-the-humber',
+  HD:'yorkshire-and-the-humber', HG:'yorkshire-and-the-humber',
+  HU:'yorkshire-and-the-humber', HX:'yorkshire-and-the-humber',
+  LS:'yorkshire-and-the-humber', S:'yorkshire-and-the-humber',
+  WF:'yorkshire-and-the-humber', YO:'yorkshire-and-the-humber',
+  // Wales
+  CF:'wales', LD:'wales', LL:'wales', NP:'wales', SA:'wales', SY:'wales',
+};
+
+function getRegion(postcode) {
+  const area = (postcode || '').trim().toUpperCase().match(/^[A-Z]+/);
+  if (!area) return 'england';
+  const code = area[0];
+  // Try two-char first, then one-char
+  return POSTCODE_REGION[code.slice(0, 2)] || POSTCODE_REGION[code.slice(0, 1)] || 'england';
+}
+
+// ─────────────────────────────────────────────────────────────
+// SPARQL
+// ─────────────────────────────────────────────────────────────
+const SPARQL_URL = 'https://landregistry.data.gov.uk/landregistry/query';
+
+async function fetchSPARQL(query, timeoutMs = 5000) {
+  const controller = new AbortController();
+  const tid = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const body = new URLSearchParams({ query });
+    const res = await fetch(SPARQL_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/sparql-results+json'
+      },
+      body: body.toString(),
+      signal: controller.signal,
+    });
+    clearTimeout(tid);
+    if (!res.ok) throw new Error(`Land Registry SPARQL returned ${res.status}`);
+    return res.json();
+  } catch (e) {
+    clearTimeout(tid);
+    throw e;
+  }
+}
+
+function bindings(data) {
+  return data?.results?.bindings ?? [];
+}
+
+function buildAddressQuery(paon, street, postcode) {
+  const p = esc(postcode.toUpperCase().trim());
+  const h = esc(paon.toUpperCase().trim());
+  const s = esc(street.toUpperCase().trim());
+  return `PREFIX lrppi: <http://landregistry.data.gov.uk/def/ppi/>
+PREFIX lrcommon: <http://landregistry.data.gov.uk/def/common/>
+SELECT ?date ?amount WHERE {
+  ?transx lrppi:pricePaid ?amount ;
+          lrppi:transactionDate ?date ;
+          lrppi:propertyAddress ?addr .
+  ?addr lrcommon:postcode "${p}" ;
+        lrcommon:paon "${h}" ;
+        lrcommon:street "${s}" .
+}
+ORDER BY DESC(?date)`;
+}
+
+// Maps the form's single-letter code to the exact lrcommon: URI fragment
+// confirmed from live Land Registry data: lrcommon:detached, lrcommon:semi-detached,
+// lrcommon:terraced, lrcommon:flat-maisonette
+// Full URIs for JS-side property type filtering after fetch
+const PROP_TYPE_FULL_URI = {
+  D: 'http://landregistry.data.gov.uk/def/common/detached',
+  S: 'http://landregistry.data.gov.uk/def/common/semi-detached',
+  T: 'http://landregistry.data.gov.uk/def/common/terraced',
+  F: 'http://landregistry.data.gov.uk/def/common/flat-maisonette',
+};
+
+// Short labels used in fallback notice
+const PROP_TYPE_SHORT = {
+  D: 'detached',
+  S: 'semi-detached',
+  T: 'terraced',
+  F: 'flat or maisonette',
+};
+
+function buildStreetQuery(street, postcode, cutoffISO) {
+  const p = esc(postcode.toUpperCase().trim());
+  const s = esc(street.toUpperCase().trim());
+  const query = `PREFIX lrppi: <http://landregistry.data.gov.uk/def/ppi/>
+PREFIX lrcommon: <http://landregistry.data.gov.uk/def/common/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+SELECT ?date ?amount ?paon ?saon ?propType WHERE {
+  ?transx lrppi:pricePaid ?amount ;
+          lrppi:transactionDate ?date ;
+          lrppi:propertyAddress ?addr .
+  ?addr lrcommon:postcode "${p}" ;
+        lrcommon:street "${s}" .
+  OPTIONAL { ?addr lrcommon:paon ?paon }
+  OPTIONAL { ?addr lrcommon:saon ?saon }
+  OPTIONAL { ?transx lrppi:propertyType ?propType }
+  FILTER(?date >= "${cutoffISO}"^^xsd:date)
+}
+ORDER BY DESC(?date)
+LIMIT 100`;
+  console.log('[StreetQuery] Query:\n', query);
+  return query;
+}
+
+// ─────────────────────────────────────────────────────────────
+// UKHPI — fetched via SPARQL (the /api/1/linked-data/resource
+// REST endpoint returns 404; SPARQL is the working route)
+// ─────────────────────────────────────────────────────────────
+
+const HPI_FIELD = {
+  D: 'ukhpi:housePriceIndexDetached',
+  S: 'ukhpi:housePriceIndexSemiDetached',
+  T: 'ukhpi:housePriceIndexTerraced',
+  F: 'ukhpi:housePriceIndexFlat',
+};
+
+const PROP_TYPE_LABEL = {
+  D: 'detached houses',
+  S: 'semi-detached houses',
+  T: 'terraced houses',
+  F: 'flats and maisonettes',
+};
+
+// Fetch HPI for a specific region + YYYY-MM month string.
+// Single query fetches both the property-type-specific index AND the general
+// housePriceIndex as a fallback — one round-trip instead of two.
+async function fetchUKHPI(region, ym, hpiField) {
+  const resourceURI = `http://landregistry.data.gov.uk/data/ukhpi/region/${region}/month/${ym}`;
+  // Only include typed OPTIONAL when hpiField is actually type-specific
+  const typedField  = (hpiField && hpiField !== 'ukhpi:housePriceIndex') ? hpiField : null;
+  const typedClause = typedField
+    ? `  OPTIONAL { <${resourceURI}> ${typedField} ?index . }`
+    : '';
+  const query = `PREFIX ukhpi: <http://landregistry.data.gov.uk/def/ukhpi/>
+SELECT ?index ?generalIndex WHERE {
+${typedClause}
+  OPTIONAL { <${resourceURI}> ukhpi:housePriceIndex ?generalIndex . }
+}`;
+  const url = `${SPARQL_URL}?query=${encodeURIComponent(query)}&_format=json`;
+  console.log(`[UKHPI] Fetching ${typedField || 'general'} HPI for ${region} ${ym}`);
+
+  const controller = new AbortController();
+  const tid = setTimeout(() => controller.abort(), 5000);
+  try {
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: { 'Accept': 'application/sparql-results+json' },
+      signal: controller.signal,
+    });
+    clearTimeout(tid);
+    if (!res.ok) return null;
+    const data = await res.json();
+    const b   = data?.results?.bindings?.[0];
+    // Prefer typed index; fall back to general index in the same response
+    const raw = b?.index?.value ?? b?.generalIndex?.value ?? null;
+    if (!raw) return null;
+    const v = parseFloat(raw);
+    console.log(`[UKHPI] ${region} ${ym}:`, v, `(${b?.index?.value ? typedField : 'general'})`);
+    return isNaN(v) ? null : v;
+  } catch (e) {
+    clearTimeout(tid);
+    if (e.name === 'AbortError') console.warn(`[UKHPI] Timeout: ${region} ${ym}`);
+    else console.warn(`[UKHPI] Error: ${region} ${ym}:`, e.message);
+    return null;
+  }
+}
+
+async function getLatestHPI(region, propertyType) {
+  const hpiField = HPI_FIELD[propertyType] || 'ukhpi:housePriceIndex';
+  // UKHPI is typically 2-3 months behind; try months 2, 3, 4 in parallel
+  const now   = new Date();
+  const slots = [2, 3, 4].map(i => {
+    const d  = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const ym = ymStr(d);
+    return { ym, p: fetchUKHPI(region, ym, hpiField) };
+  });
+  const results = await Promise.all(slots.map(s => s.p));
+  console.log('[UKHPI] getLatestHPI results:', slots.map((s, i) => `${s.ym}=${results[i]}`));
+  // Return most recent non-null result
+  // slots is ordered most-recent first (offsets 2, 3, 4 months back),
+  // so the first non-null result is always the freshest available value.
+  for (let i = 0; i < results.length; i++) {
+    if (results[i] !== null) return { hpi: results[i], month: slots[i].ym };
+  }
+  return null;
+}
+
+async function getHPIAtDate(region, dateStr, propertyType) {
+  const hpiField = HPI_FIELD[propertyType] || 'ukhpi:housePriceIndex';
+  const saleDate = new Date(dateStr);
+  // Try exact month and ±1 month simultaneously
+  const slots = [0, -1, 1].map(offset => {
+    const d  = new Date(saleDate.getFullYear(), saleDate.getMonth() + offset, 1);
+    const ym = ymStr(d);
+    return { ym, p: fetchUKHPI(region, ym, hpiField) };
+  });
+  const results = await Promise.all(slots.map(s => s.p));
+  // Return in preference order: exact month first
+  for (let i = 0; i < results.length; i++) {
+    if (results[i] !== null) return { hpi: results[i], month: slots[i].ym };
+  }
+  console.warn(`[UKHPI] getHPIAtDate: no HPI found near ${dateStr} for ${region}`);
+  return null;
+}
+
+function ymStr(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// Verdict
+// ─────────────────────────────────────────────────────────────
+function verdict(askingPrice, expectedPrice) {
+  const ratio = askingPrice / expectedPrice;
+  if (ratio < 0.95)  return { key: 'below-market',  label: 'Below Market' };
+  if (ratio <= 1.05) return { key: 'fair',           label: 'Looks Fair' };
+  if (ratio <= 1.15) return { key: 'bit-cheeky',    label: 'A Bit Cheeky' };
+  return               { key: 'very-cheeky',   label: 'Very Cheeky' };
+}
+
+// ─────────────────────────────────────────────────────────────
+// Formatting helpers
+// ─────────────────────────────────────────────────────────────
+function fmt(n) {
+  return '£' + Math.round(n).toLocaleString('en-GB');
+}
+
+function fmtDate(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function fmtMonth(ym) {
+  const [y, m] = ym.split('-');
+  return new Date(+y, +m - 1, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+}
+
+function esc(str) {
+  return String(str).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+function h(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ─────────────────────────────────────────────────────────────
+// Main analysis
+// ─────────────────────────────────────────────────────────────
+async function runCheck({ paon, street, postcode, askingPrice, propertyType }) {
+  setLoading(true);
+
+  let soldHistory       = [];
+  let streetComps       = [];
+  let sparqlError       = null;
+  let corsLikely        = false;
+  let compsTypeFiltered = true;
+  let compsTimedOut     = false;
+
+  const isCorsError = msg =>
+    msg.includes('fetch') || msg.includes('NetworkError') || msg.includes('Failed');
+
+  const cutoff = new Date();
+  cutoff.setFullYear(cutoff.getFullYear() - 3);
+  const cutoffISO = cutoff.toISOString().slice(0, 10);
+
+  const parseComps = raw => bindings(raw).map(b => ({
+    date:     b.date?.value,
+    amount:   parseInt(b.amount?.value, 10),
+    paon:     b.paon?.value ?? '',
+    saon:     b.saon?.value ?? '',
+    propType: b.propType?.value ?? '',
+  })).filter(s => s.date && !isNaN(s.amount));
+
+  // ── Queries 1 & 2 in parallel ──
+  const [historyResult, compsResult] = await Promise.allSettled([
+    fetchSPARQL(buildAddressQuery(paon, street, postcode)),
+    fetchSPARQL(buildStreetQuery(street, postcode, cutoffISO), 20000),
+  ]);
+
+  // Process address history
+  if (historyResult.status === 'fulfilled') {
+    soldHistory = bindings(historyResult.value).map(b => ({
+      date:   b.date?.value,
+      amount: parseInt(b.amount?.value, 10),
+    })).filter(s => s.date && !isNaN(s.amount));
+  } else {
+    const err = historyResult.reason;
+    if (err?.name !== 'AbortError') {
+      sparqlError = err?.message ?? 'Unknown error';
+      corsLikely  = isCorsError(sparqlError);
+    }
+  }
+
+  // Process street comparables — filter by property type in JS
+  if (compsResult.status === 'fulfilled') {
+    console.log('[StreetQuery] Raw response:', JSON.stringify(compsResult.value));
+    const allComps = parseComps(compsResult.value);
+    console.log(`[StreetQuery] Total results: ${allComps.length}`);
+
+    const targetURI = PROP_TYPE_FULL_URI[propertyType];
+    const filtered  = targetURI ? allComps.filter(c => c.propType === targetURI) : allComps;
+    console.log(`[StreetQuery] Filtered to ${propertyType}: ${filtered.length}`);
+
+    if (filtered.length > 0) {
+      streetComps = filtered;
+    } else {
+      streetComps = allComps;
+      compsTypeFiltered = false;
+      console.log('[StreetQuery] No typed results — falling back to all property types');
+    }
+  } else {
+    const err = compsResult.reason;
+    if (err?.name === 'AbortError') {
+      compsTimedOut = true;
+      console.warn('[StreetQuery] Query timed out after 20s');
+    } else if (!sparqlError) {
+      sparqlError = err?.message ?? 'Unknown error';
+      corsLikely  = isCorsError(sparqlError);
+    }
+  }
+
+  // ── HPI adjustment ──
+  let hpiResult = null;
+  if (soldHistory.length > 0) {
+    const region = getRegion(postcode);
+    const lastSale = soldHistory[0];
+    try {
+      const [currentHPI, historicHPI] = await Promise.all([
+        getLatestHPI(region, propertyType),
+        getHPIAtDate(region, lastSale.date, propertyType),
+      ]);
+      if (currentHPI && historicHPI) {
+        hpiResult = {
+          lastSoldPrice:    lastSale.amount,
+          lastSoldDate:     lastSale.date,
+          expectedPrice:    lastSale.amount * (currentHPI.hpi / historicHPI.hpi),
+          currentHPIMonth:  currentHPI.month,
+          historicHPIMonth: historicHPI.month,
+          currentHPIValue:  currentHPI.hpi,
+          historicHPIValue: historicHPI.hpi,
+          region,
+          growthPct:        ((currentHPI.hpi / historicHPI.hpi - 1) * 100).toFixed(1),
+        };
+      }
+    } catch { /* HPI optional — continue */ }
+  }
+
+  setLoading(false);
+  render({ soldHistory, streetComps, hpiResult, askingPrice, propertyType, compsTypeFiltered, compsTimedOut, paon, street, postcode, sparqlError, corsLikely });
+}
+
+// ─────────────────────────────────────────────────────────────
+// Render
+// ─────────────────────────────────────────────────────────────
+function render({ soldHistory, streetComps, hpiResult, askingPrice, propertyType, compsTypeFiltered, compsTimedOut, paon, street, postcode, sparqlError, corsLikely }) {
+  const el = document.getElementById('results');
+  el.style.display = 'block';
+
+  const parts = [];
+
+  // ── CORS / network warning ──
+  if (corsLikely) {
+    parts.push(`<div class="notice">
+      <strong>Could not reach Land Registry.</strong>
+      This is likely a browser CORS restriction. The API blocks direct browser requests from some origins.
+      Try serving this file via a local web server (<code>npx serve .</code> or similar), or the Land Registry API may be temporarily unavailable.
+    </div>`);
+  } else if (sparqlError && soldHistory.length === 0 && streetComps.length === 0) {
+    parts.push(`<div class="error-box">
+      <strong>Could not retrieve data</strong>
+      <p>${h(sparqlError)}</p>
+      <p style="margin-top:.5rem">The Land Registry API may be temporarily unavailable. Please try again shortly.</p>
+    </div>`);
+    el.innerHTML = parts.join('');
+    return;
+  }
+
+  // ── Verdict ──
+  if (hpiResult) {
+    const v   = verdict(askingPrice, hpiResult.expectedPrice);
+    const diff = askingPrice - hpiResult.expectedPrice;
+    const absDiff = Math.abs(diff);
+    const direction = diff >= 0 ? 'above' : 'below';
+    const pctOff = Math.abs(((askingPrice / hpiResult.expectedPrice) - 1) * 100).toFixed(1);
+    const regionLabel = hpiResult.region.replace(/-/g, ' ');
+
+    const compAmounts = streetComps.map(c => c.amount).filter(Boolean);
+    const hasComps = compAmounts.length >= 2;
+    const propLabel = PROP_TYPE_LABEL[propertyType] || 'properties';
+    const compRange = hasComps
+      ? ` Similar ${propLabel} on this street have sold for ${fmt(Math.min(...compAmounts))}–${fmt(Math.max(...compAmounts))} in the last 3 years.`
+      : '';
+
+    parts.push(`<div class="verdict-card ${h(v.key)}">
+      <div class="verdict-eyebrow">Our verdict</div>
+      <div class="verdict-text">${h(v.label)}</div>
+      <div class="verdict-explanation">
+        Adjusted for ${h(hpiResult.growthPct)}% regional price growth in ${h(regionLabel)} since ${h(fmtMonth(hpiResult.historicHPIMonth))},
+        this property would be expected to sell for around <strong>${h(fmt(hpiResult.expectedPrice))}</strong> today.
+        The asking price of <strong>${h(fmt(askingPrice))}</strong> is ${h(fmt(absDiff))} ${h(direction)}
+        (${h(pctOff)}%).${h(compRange)}
+      </div>
+    </div>
+    <p style="font-size:0.8rem;margin-top:0.5rem"><a href="caveats.html" target="_blank" rel="noopener" style="color:#4a3f8a;text-decoration:underline">How are these verdicts defined?</a></p>`);
+
+    parts.push(`<div class="price-row">
+      <div class="price-card">
+        <div class="price-card-label">Asking Price</div>
+        <div class="price-card-value">${h(fmt(askingPrice))}</div>
+      </div>
+      <div class="price-card">
+        <div class="price-card-label">Expected Today</div>
+        <div class="price-card-value">${h(fmt(hpiResult.expectedPrice))}</div>
+        <div class="price-card-sub">HPI-adjusted estimate</div>
+      </div>
+      <div class="price-card">
+        <div class="price-card-label">Last Sold</div>
+        <div class="price-card-value">${h(fmt(hpiResult.lastSoldPrice))}</div>
+        <div class="price-card-sub">${h(fmtDate(hpiResult.lastSoldDate))}</div>
+      </div>
+    </div>`);
+
+  } else if (soldHistory.length === 0 && !sparqlError) {
+    parts.push(`<div class="verdict-card no-data">
+      <div class="verdict-eyebrow">Our verdict</div>
+      <div class="verdict-text">No previous sale found</div>
+      <div class="verdict-explanation">
+        We couldn't find a previous sale for this exact address in the Land Registry.
+        New builds and some leasehold conversions may not appear yet.
+        You can still use the street comparables below as a guide.
+      </div>
+    </div>`);
+
+  } else if (soldHistory.length > 0 && !hpiResult) {
+    parts.push(`<div class="verdict-card no-data">
+      <div class="verdict-eyebrow">Partial data</div>
+      <div class="verdict-text">Price index unavailable</div>
+      <div class="verdict-explanation">
+        We found the sale history but couldn't retrieve regional HPI data to calculate an inflation-adjusted estimate.
+        The last recorded sale was <strong>${h(fmt(soldHistory[0].amount))}</strong> on ${h(fmtDate(soldHistory[0].date))}.
+      </div>
+    </div>`);
+  }
+
+  // ── Property sale history ──
+  if (soldHistory.length > 0) {
+    const address = `${paon} ${street}, ${postcode}`.toUpperCase();
+    parts.push(`<div class="section">
+      <div class="section-title">Sale history: ${h(address)}</div>
+      <table class="sale-table">
+        <thead><tr><th>Date</th><th style="text-align:right">Price paid</th></tr></thead>
+        <tbody>
+          ${soldHistory.map(s => `<tr>
+            <td>${h(fmtDate(s.date))}</td>
+            <td class="amount">${h(fmt(s.amount))}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`);
+  }
+
+  // ── Street comparables ──
+  if (streetComps.length > 0) {
+    const amounts = streetComps.map(c => c.amount).filter(Boolean);
+    const minC = Math.min(...amounts);
+    const maxC = Math.max(...amounts);
+    const avgC = amounts.reduce((a, b) => a + b, 0) / amounts.length;
+
+    const compTitle = compsTypeFiltered
+      ? `Comparable ${h(PROP_TYPE_LABEL[propertyType] || 'sales')} on ${h(street.toUpperCase())}, ${h(postcode.toUpperCase())}, last 3 years`
+      : `Comparable sales on ${h(street.toUpperCase())}, ${h(postcode.toUpperCase())}, last 3 years`;
+    const typeNotice = !compsTypeFiltered
+      ? `<div class="notice" style="margin-bottom:1rem">No ${h(PROP_TYPE_SHORT[propertyType] || 'matching')} sales found on this street in the last 3 years. Showing all property types instead.</div>`
+      : '';
+    parts.push(`<div class="section">
+      <div class="section-title">${compTitle}</div>
+      ${typeNotice}
+      <div class="comp-summary">
+        <div class="comp-pill">
+          <div class="comp-pill-label">Range</div>
+          <div class="comp-pill-value" style="font-size:.9rem">${h(fmt(minC))} – ${h(fmt(maxC))}</div>
+        </div>
+        <div class="comp-pill">
+          <div class="comp-pill-label">Average</div>
+          <div class="comp-pill-value">${h(fmt(avgC))}</div>
+        </div>
+        <div class="comp-pill">
+          <div class="comp-pill-label">Sales found</div>
+          <div class="comp-pill-value">${streetComps.length}</div>
+        </div>
+      </div>
+      <table class="sale-table">
+        <thead><tr><th>Address</th><th>Date</th><th style="text-align:right">Price</th></tr></thead>
+        <tbody>
+          ${streetComps.map(c => {
+            const addrParts = [c.saon, c.paon, street.toUpperCase()].filter(Boolean);
+            return `<tr>
+              <td class="addr-cell">${h(addrParts.join(', '))}</td>
+              <td>${h(fmtDate(c.date))}</td>
+              <td class="amount">${h(fmt(c.amount))}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`);
+
+  } else if (compsTimedOut) {
+    parts.push(`<div class="section">
+      <div class="section-title">Comparable sales, last 3 years</div>
+      <p style="color:#999;font-size:.9rem">Street comparables unavailable: the search took too long. Please try again.</p>
+    </div>`);
+  } else if (!sparqlError && !corsLikely) {
+    parts.push(`<div class="section">
+      <div class="section-title">Comparable sales, last 3 years</div>
+      <p style="color:#999;font-size:.9rem">No sales found for this street and postcode in the last 3 years. This may be a low-turnover area.</p>
+    </div>`);
+  }
+
+  // ── HPI index breakdown ──
+  if (hpiResult) {
+    const hpiChange = parseFloat(hpiResult.growthPct);
+    const hpiSign   = hpiChange >= 0 ? '+' : '';
+    parts.push(`<div class="section">
+      <div class="section-title">House Price Index breakdown</div>
+      <div class="price-row">
+        <div class="price-card">
+          <div class="price-card-label">HPI at last sale</div>
+          <div class="price-card-value">${h(parseFloat(hpiResult.historicHPIValue).toFixed(1))}</div>
+          <div class="price-card-sub">${h(fmtMonth(hpiResult.historicHPIMonth))}</div>
+        </div>
+        <div class="price-card">
+          <div class="price-card-label">Current HPI</div>
+          <div class="price-card-value">${h(parseFloat(hpiResult.currentHPIValue).toFixed(1))}</div>
+          <div class="price-card-sub">${h(fmtMonth(hpiResult.currentHPIMonth))}</div>
+        </div>
+        <div class="price-card">
+          <div class="price-card-label">Change</div>
+          <div class="price-card-value">${h(hpiSign + hpiResult.growthPct)}%</div>
+        </div>
+      </div>
+      <p style="color:#8a8799;font-size:.85rem;margin-top:.85rem">
+        The expected price is estimated by multiplying the last sale price by the ratio of the current index to the index at the time of sale.
+        These figures are regional averages and cover the ${h(hpiResult.region.replace(/-/g, ' '))} area as a whole — growth on your specific street may differ.
+      </p>
+    </div>`);
+  }
+
+  // ── Disclaimer ──
+  parts.push(`<p class="disclaimer">
+    This tool uses HM Land Registry Price Paid Data (updated monthly) and the UK HPI.
+    It does not account for property condition, extensions, renovations, or local micro-market factors.
+    The HPI adjustment uses regional averages. Growth in your specific area may differ.
+    Always instruct a RICS-qualified surveyor before exchanging contracts.
+  </p>`);
+
+  el.innerHTML = parts.join('\n');
+}
+
+// ─────────────────────────────────────────────────────────────
+// UI helpers
+// ─────────────────────────────────────────────────────────────
+const LOADING_MESSAGES = [
+  { delay:     0, main: 'Looking up this property\u2026',          sub: 'Searching Land Registry records' },
+  { delay:  4000, main: "Checking what\u2019s sold nearby\u2026",  sub: 'Finding comparable properties on the same street' },
+  { delay:  9000, main: 'Crunching the regional price data\u2026', sub: 'Adjusting for local market growth since last sale' },
+  { delay: 14000, main: 'Almost there\u2026',                      sub: 'Working out whether the asking price is fair' },
+];
+
+let _loadingTimers = [];
+
+function setLoading(show) {
+  const loadingEl = document.getElementById('loading');
+  const resultsEl = document.getElementById('results');
+  const submitBtn = document.getElementById('submitBtn');
+
+  _loadingTimers.forEach(t => clearTimeout(t));
+  _loadingTimers = [];
+
+  loadingEl.style.display = show ? 'block' : 'none';
+  if (!show) resultsEl.style.display = 'none'; // hide until render() sets it
+  submitBtn.disabled = show;
+
+  if (show) {
+    LOADING_MESSAGES.forEach(({ delay, main, sub }) => {
+      _loadingTimers.push(setTimeout(() => _fadeMessage(main, sub), delay));
+    });
+  } else {
+    const msgEl  = document.getElementById('loadingMsg');
+    const stepEl = document.getElementById('loadingStep');
+    msgEl.style.opacity  = '0';
+    stepEl.style.opacity = '0';
+  }
+}
+
+function _fadeMessage(main, sub) {
+  const msgEl  = document.getElementById('loadingMsg');
+  const stepEl = document.getElementById('loadingStep');
+  msgEl.style.opacity  = '0';
+  stepEl.style.opacity = '0';
+  setTimeout(() => {
+    msgEl.textContent  = main;
+    stepEl.textContent = sub || '';
+    msgEl.style.opacity  = '1';
+    stepEl.style.opacity = '1';
+  }, 190);
+}
+
+// ─────────────────────────────────────────────────────────────
+// Address lookup — Ideal Postcodes fetch-based autocomplete
+// ─────────────────────────────────────────────────────────────
+const IP_KEY            = 'ak_mnrjo5tnLfkcJDkVDTNGY1DOzFAQR';
+const IP_AUTOCOMPLETE   = 'https://api.ideal-postcodes.co.uk/v1/autocomplete/addresses';
+const IP_UDPRN          = 'https://api.ideal-postcodes.co.uk/v1/udprn';
+
+let _debounceTimer = null;
+let _currentHits   = [];
+
+// ── Dropdown ────────────────────────────────────────────────
+const _dropdown = document.createElement('ul');
+_dropdown.className    = 'addr-dropdown';
+_dropdown.style.display = 'none';
+document.getElementById('addrSearchGroup').appendChild(_dropdown);
+console.log('[AddrLookup] Dropdown element created and appended');
+
+function showDropdown(hits) {
+  _currentHits = hits;
+  _dropdown.innerHTML = '';
+
+  if (hits.length === 0) {
+    _dropdown.style.display = 'none';
+    console.log('[AddrLookup] No suggestions to show');
+    return;
+  }
+
+  hits.forEach((hit, i) => {
+    const li       = document.createElement('li');
+    li.textContent = hit.suggestion;
+    li.addEventListener('mousedown', e => {
+      e.preventDefault(); // prevent input blur before click registers
+      console.log('[AddrLookup] Suggestion clicked:', hit.suggestion, '| udprn:', hit.udprn);
+      selectSuggestion(hit);
+    });
+    _dropdown.appendChild(li);
+  });
+
+  _dropdown.style.display = 'block';
+  console.log('[AddrLookup] Showing', hits.length, 'suggestions');
+}
+
+function hideDropdown() {
+  _dropdown.style.display = 'none';
+}
+
+// ── Address selection ────────────────────────────────────────
+async function selectSuggestion(hit) {
+  hideDropdown();
+  document.getElementById('address-search').value = hit.suggestion;
+
+  const udprn = hit.udprn;
+  console.log('[AddrLookup] Fetching full address for udprn:', udprn);
+
+  try {
+    const url = `${IP_UDPRN}/${udprn}?api_key=${IP_KEY}`;
+    console.log('[AddrLookup] UDPRN URL:', url);
+
+    const res  = await fetch(url);
+    const data = await res.json();
+    console.log('[AddrLookup] UDPRN response status:', res.status);
+    console.log('[AddrLookup] UDPRN response body:', JSON.stringify(data));
+
+    if (!res.ok || !data.result) {
+      throw new Error(`UDPRN lookup failed (${res.status}): ${JSON.stringify(data)}`);
+    }
+
+    const addr     = data.result;
+    const { paon, street } = extractPaonStreet(addr);
+    const postcode = addr.postcode || '';
+    const parts    = [addr.line_1, addr.post_town, postcode].filter(Boolean);
+    const displayText = parts.join(', ');
+
+    console.log('[AddrLookup] Parsed address:', { paon, street, postcode, displayText });
+    confirmAddress(paon, street, postcode, displayText);
+
+  } catch (err) {
+    console.error('[AddrLookup] Error fetching full address:', err);
+  }
+}
+
+// ── Parse PAON + street from structured address ──────────────
+function extractPaonStreet(addr) {
+  let paon = '';
+  if (addr.sub_building_name)  paon = addr.sub_building_name;
+  if (addr.building_number)    paon = paon ? `${paon} ${addr.building_number}` : addr.building_number;
+  else if (addr.building_name) paon = paon ? `${paon} ${addr.building_name}`   : addr.building_name;
+
+  const street = addr.thoroughfare || addr.dependent_thoroughfare || '';
+
+  // Fallback: split line_1 on first word-boundary between number and text
+  if (!paon || !street) {
+    const m = (addr.line_1 || '').match(/^(\S+)\s+(.+)$/);
+    if (m) return { paon: paon || m[1], street: street || m[2] };
+  }
+
+  console.log('[AddrLookup] extractPaonStreet →', { paon, street });
+  return { paon, street };
+}
+
+// ── Confirm / clear selection ────────────────────────────────
+function confirmAddress(paon, street, postcode, displayText) {
+  document.getElementById('paonField').value     = paon;
+  document.getElementById('streetField').value   = street;
+  document.getElementById('postcodeField').value = postcode;
+
+  document.getElementById('addrConfirmText').textContent = displayText;
+  document.getElementById('addrConfirm').classList.add('visible');
+  document.getElementById('address-search').style.display  = 'none';
+  document.getElementById('manualEntryLink').style.display = 'none';
+  console.log('[AddrLookup] Address confirmed:', { paon, street, postcode });
+}
+
+function clearSelection() {
+  document.getElementById('paonField').value     = '';
+  document.getElementById('streetField').value   = '';
+  document.getElementById('postcodeField').value = '';
+  document.getElementById('addrConfirm').classList.remove('visible');
+  document.getElementById('address-search').style.display  = '';
+  document.getElementById('address-search').value = '';
+  document.getElementById('manualEntryLink').style.display = '';
+  document.getElementById('address-search').focus();
+  console.log('[AddrLookup] Selection cleared');
+}
+
+function openManualEntry() {
+  document.getElementById('addrSearchGroup').style.display = 'none';
+  document.getElementById('addrManualSection').classList.add('visible');
+  document.getElementById('houseNumber').focus();
+  console.log('[AddrLookup] Switched to manual entry');
+}
+
+// ── Input handler with 500ms debounce ────────────────────────
+document.getElementById('address-search').addEventListener('input', function () {
+  const q = this.value.trim();
+  console.log('[AddrLookup] Input:', q);
+
+  clearTimeout(_debounceTimer);
+
+  if (q.length < 2) {
+    hideDropdown();
+    return;
+  }
+
+  _debounceTimer = setTimeout(async () => {
+    const url = `${IP_AUTOCOMPLETE}?q=${encodeURIComponent(q)}&api_key=${IP_KEY}`;
+    console.log('[AddrLookup] Fetching suggestions:', url);
+
+    try {
+      const res  = await fetch(url);
+      const data = await res.json();
+      console.log('[AddrLookup] Suggestions status:', res.status);
+      console.log('[AddrLookup] Suggestions body:', JSON.stringify(data));
+
+      const hits = data?.result?.hits || [];
+      showDropdown(hits);
+    } catch (err) {
+      console.error('[AddrLookup] Error fetching suggestions:', err);
+      hideDropdown();
+    }
+  }, 500);
+});
+
+// Close dropdown when focus leaves the input
+document.getElementById('address-search').addEventListener('blur', () => {
+  setTimeout(hideDropdown, 150); // delay lets mousedown on item fire first
+});
+
+// "Change" link
+document.getElementById('addrChangeLink').addEventListener('click', e => {
+  e.preventDefault();
+  clearSelection();
+});
+
+// "Enter address manually instead" link
+document.getElementById('manualEntryLink').addEventListener('click', e => {
+  e.preventDefault();
+  openManualEntry();
+});
+
+// ─────────────────────────────────────────────────────────────
+// Form submit
+// ─────────────────────────────────────────────────────────────
+document.getElementById('propertyType').addEventListener('change', () => {
+  document.getElementById('propTypeError').style.display = 'none';
+});
+
+document.getElementById('checkForm').addEventListener('submit', async e => {
+  e.preventDefault();
+
+  const propertyType  = document.getElementById('propertyType').value;
+  const propTypeError = document.getElementById('propTypeError');
+
+  if (!propertyType) {
+    propTypeError.style.display = 'block';
+    document.getElementById('propertyType').focus();
+    return;
+  }
+  propTypeError.style.display = 'none';
+
+  const askingPrice = parseInt(document.getElementById('askingPrice').value, 10);
+  if (!askingPrice) return;
+
+  const isManual = document.getElementById('addrManualSection').classList.contains('visible');
+
+  let paon, street, postcode;
+
+  if (isManual) {
+    paon     = document.getElementById('houseNumber').value.trim();
+    street   = document.getElementById('street').value.trim();
+    postcode = document.getElementById('postcode').value.trim();
+  } else {
+    paon     = document.getElementById('paonField').value.trim();
+    street   = document.getElementById('streetField').value.trim();
+    postcode = document.getElementById('postcodeField').value.trim();
+  }
+
+  if (!paon || !street || !postcode) {
+    // No address yet — prompt autocomplete or manual
+    if (!isManual) {
+      document.getElementById('address-search').focus();
+    } else {
+      document.getElementById('houseNumber').focus();
+    }
+    return;
+  }
+
+  document.getElementById('results').style.display = 'none';
+
+  try {
+    await runCheck({ paon, street, postcode, askingPrice, propertyType });
+  } catch (err) {
+    setLoading(false);
+    const el = document.getElementById('results');
+    el.style.display = 'block';
+    el.innerHTML = `<div class="error-box">
+      <strong>Something went wrong</strong>
+      <p>${h(err.message)}</p>
+    </div>`;
+  }
+});
+</script>
+</body>
+</html>

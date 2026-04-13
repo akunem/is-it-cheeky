@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Small Print: Is It Cheeky?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #f7f6f9;
+      color: #2e2c45;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    p { margin-bottom: 1.5rem; }
+    p:last-child { margin-bottom: 0; }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 2.5rem 4rem 3rem;
+    }
+
+    /* ── Nav ── */
+    .lp-nav-wrap {
+      padding: 1.25rem 4rem 0;
+    }
+
+    .lp-nav-wrap .site-nav { margin-bottom: 0; }
+
+    .site-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid #e2e0ec;
+    }
+
+    .site-nav .site-nav-wordmark {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: #8a8799;
+      text-decoration: none;
+    }
+
+    .site-nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .site-nav a {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: #8a8799;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .site-nav a:hover { color: #1a1a2e; }
+    .site-nav a.active { color: #4a3f8a; font-weight: 600; }
+
+    /* ── Header ── */
+    header { margin-bottom: 2.5rem; }
+
+    h1, h2, h3 { font-family: 'DM Serif Display', serif; }
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      color: #1a1a2e;
+    }
+
+    .tagline {
+      color: #8a8799;
+      margin-top: 0.45rem;
+      font-size: 1rem;
+    }
+
+    /* ── Caveat sections ── */
+    .caveat-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .caveat-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin-bottom: 0.5rem;
+    }
+
+    .caveat-body {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      color: #2e2c45;
+      line-height: 1.75;
+      margin-bottom: 0;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e0ec;
+      font-size: 0.78rem;
+      color: #8a8799;
+      line-height: 1.6;
+    }
+
+    footer p { margin-bottom: 0; }
+    footer a { color: #4a3f8a; }
+
+    /* ── Verdict grid ── */
+    .verdict-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.875rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .verdict-grid-card {
+      background: #efecf7;
+      border-radius: 10px;
+      padding: 1.1rem;
+    }
+
+    .verdict-grid-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: #8a8799;
+      margin-bottom: 0.3rem;
+    }
+
+    .verdict-grid-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .verdict-grid-def {
+      font-size: 0.875rem;
+      color: #2e2c45;
+      line-height: 1.5;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 520px) {
+      h1 { font-size: 1.9rem; }
+      .lp-nav-wrap { padding: 1.25rem 1.5rem 0; }
+      .container { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .verdict-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="lp-nav-wrap">
+  <nav class="site-nav">
+    <a href="index.html" class="site-nav-wordmark">Is It Cheeky?</a>
+    <div class="site-nav-links">
+      <a href="index.html#tool">Check a property</a>
+      <a href="caveats.html" class="active">Caveats</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+</div>
+<div class="container">
+
+  <header style="text-align:center">
+    <h1>The small print</h1>
+    <p class="tagline">What this tool can and can't tell you.</p>
+  </header>
+
+  <div class="caveat-section" id="verdicts">
+    <p class="caveat-title">How the verdicts are defined</p>
+    <div style="display:inline-block;max-width:520px;background:#efecf7;border-radius:10px;overflow:hidden;padding:0.35rem 0;margin-bottom:1.25rem">
+      <div style="display:grid;grid-template-columns:160px 1fr;padding:0.5rem 1rem">
+        <span style="font-weight:700;font-size:0.95rem;color:#4a3f8a">Below Market</span>
+        <span style="font-size:0.9rem;color:#2e2c45">The asking price is more than 5% below the HPI-adjusted estimate.</span>
+      </div>
+      <div style="display:grid;grid-template-columns:160px 1fr;padding:0.5rem 1rem">
+        <span style="font-weight:700;font-size:0.95rem;color:#3a7a4a">Looks Fair</span>
+        <span style="font-size:0.9rem;color:#2e2c45">The asking price is within 5% either side of the estimate.</span>
+      </div>
+      <div style="display:grid;grid-template-columns:160px 1fr;padding:0.5rem 1rem">
+        <span style="font-weight:700;font-size:0.95rem;color:#8a6020">A Bit Cheeky</span>
+        <span style="font-size:0.9rem;color:#2e2c45">The asking price is between 5% and 15% above the estimate.</span>
+      </div>
+      <div style="display:grid;grid-template-columns:160px 1fr;padding:0.5rem 1rem">
+        <span style="font-weight:700;font-size:0.95rem;color:#8a3030">Very Cheeky</span>
+        <span style="font-size:0.9rem;color:#2e2c45">The asking price is more than 15% above the estimate.</span>
+      </div>
+    </div>
+    <p class="caveat-body">These thresholds are a guide based on typical asking price negotiation margins in England and Wales. A property priced above the estimate is not necessarily overpriced if it has been extended, renovated, or is in unusually high local demand.</p>
+  </div>
+
+  <div class="caveat-section">
+    <p class="caveat-title">A starting point, not a final answer</p>
+    <p class="caveat-body">Is It Cheeky? uses real government data to give you a data-backed sense check. But it can't account for everything. Use it to inform your thinking, not to make your decision.</p>
+  </div>
+
+  <div class="caveat-section">
+    <p class="caveat-title">Condition and renovations</p>
+    <p class="caveat-body">A house that's been extended, renovated, or significantly improved since it last sold could legitimately ask more than our calculation suggests. Always ask the seller what work has been done since the last sale.</p>
+  </div>
+
+  <div class="caveat-section">
+    <p class="caveat-title">Regional vs local</p>
+    <p class="caveat-body">The <a href="https://www.gov.uk/government/collections/uk-house-price-index-reports" target="_blank" rel="noopener" style="color:#4a3f8a;">UK House Price Index</a> adjustment uses regional averages. The South East is a big place. Prices in your specific street may have moved very differently to the regional trend. A new school, a regeneration project, or a new transport link can move a micro-market significantly.</p>
+  </div>
+
+  <div class="caveat-section">
+    <p class="caveat-title">Data lag</p>
+    <p class="caveat-body">Land Registry Price Paid Data can lag real-world completions by anywhere from 2 to 6 months, and sometimes longer for complex transactions or new builds. A sale completed recently may simply not have appeared yet.</p>
+  </div>
+
+  <div class="caveat-section">
+    <p class="caveat-title">Pre-1995 properties</p>
+    <p class="caveat-body">Land Registry digital records begin in 1995. If a property has not sold since before then, no sale history will appear. It does not mean the property has never sold, only that the data is not available.</p>
+  </div>
+
+  <div class="caveat-section">
+    <p class="caveat-title">Not financial or legal advice</p>
+    <p class="caveat-body">This is a personal project built by a first time buyer for first time buyers. Always instruct a <a href="https://www.ricsfirms.com" target="_blank" rel="noopener" style="color:#4a3f8a;">RICS</a>-qualified surveyor before exchanging contracts. A surveyor will assess condition, structure, and value in ways this tool cannot. Nothing on this site constitutes financial or legal advice.</p>
+  </div>
+
+  <footer>
+    <p>Data sourced from <a href="https://landregistry.data.gov.uk" target="_blank" rel="noopener">HM Land Registry</a>: Price Paid Data and UK House Price Index. Covers England and Wales only. For guidance only, not financial or legal advice.</p>
+  </footer>
+
+</div>
+</body>
+</html>
