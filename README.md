@@ -103,10 +103,6 @@ Set the site entry to `index.html`. No server-side runtime is required for the p
 - [HM Land Registry linked open data](https://landregistry.data.gov.uk/) — Price Paid and UK House Price Index  
 - Coverage: England and Wales only  
 
-## Licence
-
-Add a licence file if you intend to open-source this repository; none is present in the tree at the time of writing.
-
 ## Project status
 
 This was built as a personal project during a week off and is not actively being developed with new features. Bugs will be fixed when time allows. Feedback is welcome via the contact form on the site at [www.isitcheeky.com](https://www.isitcheeky.com).
