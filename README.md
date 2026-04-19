@@ -2,7 +2,7 @@
 
 A small static web app for England and Wales that helps first-time buyers sanity-check an asking price against HM Land Registry data: the property’s own sold history, comparable sales on the same street (last three years, ideally matching property type), and an HPI-adjusted “expected price today” derived from the UK House Price Index.
 
-It is guidance only—not valuation, financial, or legal advice.
+It is guidance only, not valuation, financial, or legal advice.
 
 ## Tech stack
 
